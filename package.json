@@ -1,0 +1,10 @@
+{
+	"name": "open-game",
+	"devDependencies": {
+		"bundler-config": "^0.0.0",
+		"fibers": "^5.0.0",
+		"rollup": "^2.27.1",
+		"sass": "^1.26.11",
+		"typescript": "^4.0.2"
+	}
+}

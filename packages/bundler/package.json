@@ -1,0 +1,31 @@
+{
+  "devDependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
+    "@rollup/plugin-auto-install": "^2.1.0",
+    "@rollup/plugin-buble": "^0.21.3",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-html": "^0.2.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-strip": "^2.0.0",
+    "@rollup/plugin-sucrase": "^3.1.0",
+    "@rollup/plugin-typescript": "^6.0.0",
+    "@rollup/plugin-yaml": "^2.1.1",
+    "html-minifier-terser": "^5.1.1",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-manifest-json": "^1.4.2",
+    "rollup-plugin-serve": "^1.0.4",
+    "rollup-plugin-size-snapshot": "^0.12.0",
+    "rollup-plugin-styles": "^3.10.0"
+  },
+  "name": "bundler-config",
+  "version": "0.0.0",
+  "description": "A rollup config specifically for game development",
+  "type": "module",
+  "exports": {
+    ".": "./config.js",
+    "./asset": "./imagemin.js"
+  },
+  "author": "Fahmi Akbar Wildana",
+  "license": "MIT"
+}
