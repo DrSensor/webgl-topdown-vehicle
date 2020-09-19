@@ -25,7 +25,13 @@ const app = new Application({
 document.body.appendChild(app.view)
 
 // Listen for window resize events
-const resize = () => app.renderer.resize(window.innerWidth / 2, window.innerHeight / 2)
+const resize = () => {
+    app.renderer.resize(window.innerWidth / 2, window.innerHeight / 2)
+    if (window.innerWidth > window.innerHeight)
+        app.stage.scale.set(window.innerWidth / screen.availWidth)
+    else if (window.innerWidth < window.innerHeight)
+        app.stage.scale.set(window.innerHeight / screen.availHeight)
+}
 window.addEventListener('resize', resize)
 resize()
 
