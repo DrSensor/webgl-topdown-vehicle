@@ -42,7 +42,6 @@ function template({ attributes, files, meta, publicPath, title, manifest: appMan
           ${links}
         </head>
         <body>
-          <canvas/>
           ${scripts}
         </body>
       </html>`)

@@ -61,10 +61,11 @@ export default function ({
 			name: app.short_name?.replace('-', '') ?? INPUT_NAME, // TODO: replace() -> camelCase()
 		},
 		plugins: [
-			autoinstall(),
+			// autoinstall(),
 			resolve({
 				browser: true,
-				dedupe: []
+				preferBuiltins: true,
+				dedupe: [],
 			}),
 			commonjs(),
 
@@ -83,8 +84,14 @@ export default function ({
 
 			...(!production ?
 				[ // development
-					sucrase(),
-					serve(),
+					// sucrase({ // doesn't work
+					// 	exclude: ['node_modules/**', 'packages/*/**'],
+					// 	transforms: ['typescript'],
+					// 	enableLegacyTypeScriptModuleInterop: true,
+					// 	enableLegacyBabel5ModuleInterop: true,
+					// }),
+					typescript(), // TODO: try esbuild
+					serve('dist'),
 					livereload('dist'),
 				] :
 				[ // production
@@ -92,7 +99,7 @@ export default function ({
 					strip(),
 					buble(),
 					gcc({
-						compilation_level: 'ADVANCED',
+						compilation_level: 'SIMPLE',
 					}),
 				]),
 
