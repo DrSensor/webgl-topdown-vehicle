@@ -7,6 +7,7 @@ import typescript from '@rollup/plugin-typescript'
 // loader
 import yaml from '@rollup/plugin-yaml'
 import json from '@rollup/plugin-json'
+import url from '@rollup/plugin-url'
 
 // js transformer
 import sucrase from '@rollup/plugin-sucrase'
@@ -16,11 +17,13 @@ import gcc from '@ampproject/rollup-plugin-closure-compiler'
 
 // meta
 import indexHtml from '@rollup/plugin-html'
-import { minify as minifiedHtml } from './html-template.js'
+import * as html from './html-template.js'
 import styles from 'rollup-plugin-styles'
+import hotcss from 'rollup-plugin-hot-css'
 import appManifest from 'rollup-plugin-manifest-json'
 
 // QoL
+import mode from './mode.js'
 import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
 import sizes from 'rollup-plugin-size-snapshot'
@@ -29,20 +32,23 @@ const { sizeSnapshot } = sizes
 import path from 'path'
 const { basename, extname } = path
 import workaround from './workaround.cjs'
-const { loadPkg } = workaround
+const { loadPkg, relativePath } = workaround
 
 export default function ({
 	input = 'src/main.ts',
 	packageJson = './package.json',
-	manifest = './manifest.json'
+	manifest = './manifest.json',
+	assets = { publicPath: 'assets' },
+	hash = true,
 } = {}) {
 	const
 		INPUT_NAME = basename(input, extname(input)),
-		production = !process.env.ROLLUP_WATCH,
 		pkg = loadPkg(packageJson),
-		app = loadPkg(manifest)
+		app = loadPkg(manifest),
+		dist = `dist/${mode.production ?
+			'production' : 'development'}`
 
-	// BUG(typescript): error on using ??=
+	// BUG(rollup): error on using ??=
 	app.description ?? (app.description = pkg.description)
 	app.short_name ?? (app.short_name = pkg.name)
 	app.categories ?? (app.categories = ['games'])
@@ -51,57 +57,93 @@ export default function ({
 	return {
 		input,
 		output: {
-			sourcemap: production,
-			format: production ? 'iife' : 'es',
+			dir: dist,
+			format: mode.production ? 'iife' : 'es',
+			sourcemap: !mode.production,
 			freeze: false,
 			esModule: false,
-			dir: 'dist',
-			assetFileNames: '[name][extname]',
+			externalLiveBindings: false,
+			preferConst: true,
 			// https://stackoverflow.com/a/62825401/5221998
 			name: app.short_name?.replace('-', '') ?? INPUT_NAME, // TODO: replace() -> camelCase()
+			...(mode.production ?
+				{ // production
+					...(hash && { entryFileNames: '[name]-[hash].js' })
+				} : {// non-production
+					...{ // just to suppress warning
+						treeshake: true,
+						preserveSymlinks: true,
+					},
+					preserveModules: true,
+				}),
+			preserveModulesRoot: 'src',
+			assetFileNames: mode.production && hash ?
+				'[name]-[hash][extname]' : '[name][extname]',
 		},
+		// TODO: find a way to skip node_modules or something like snowpack
+		// external: !mode.production && Object.keys(pkg.dependencies),
 		plugins: [
 			// autoinstall(),
 			resolve({
 				browser: true,
-				preferBuiltins: true,
-				dedupe: [],
+				preferBuiltins: mode.production,
 			}),
-			commonjs(),
+			commonjs({
+				esmExternals: !mode.production,
+				requireReturnsDefault: !mode.production
+			}),
 
 			yaml(),
 			json({
-				compact: production,
+				compact: mode.production,
 				preferConst: true,
 			}),
 
 			styles({
 				mode: 'extract',
 				autoModules: true,
-				sass: { outputStyle: production ? 'compressed' : 'expanded' },
-				less: { compress: production },
+				config: mode.production,
+				minimize: mode.production,
+				sourceMap: !mode.production,
+				url: {
+					hash: mode.production && hash,
+					// FIXME: cause runtime-error in mode.production
+					publicPath: assets.publicPath,
+				},
+				sass: {
+					outputStyle: mode.production ?
+						'compressed' : 'expanded',
+				},
+				less: { compress: mode.production },
+			}),
+			mode.development && hotcss({
+				hot: true,
+				url: false,
 			}),
 
-			...(!production ?
-				[ // development
-					// sucrase({ // doesn't work
-					// 	exclude: ['node_modules/**', 'packages/*/**'],
-					// 	transforms: ['typescript'],
-					// 	enableLegacyTypeScriptModuleInterop: true,
-					// 	enableLegacyBabel5ModuleInterop: true,
-					// }),
-					typescript(), // TODO: try esbuild
-					serve('dist'),
-					livereload('dist'),
-				] :
-				[ // production
-					typescript(),
-					strip(),
-					buble(),
-					gcc({
-						compilation_level: 'SIMPLE',
-					}),
-				]),
+			url({
+				limit: 3141, // 3kb
+				// TODO: make [name] same as styles.url resolver (rollup/plugins#573)
+				// make PR for https://github.com/rollup/plugins/issues/573
+				// hint: take a look on how rollup-plugin-styles use the assetFileNames hash
+				fileName: `[dirname][name]${mode.production && hash ? '-[hash]' : ''}[extname]`,
+			}),
+
+			!mode.production && sucrase({
+				transforms: ['typescript'],
+			}),
+			...(mode.preview ? [
+				serve(dist),
+				livereload(dist),
+			] : []),
+			...(mode.production ? [
+				typescript(),
+				strip(),
+				buble(),
+				gcc({
+					compilation_level: 'SIMPLE',
+				}),
+			] : []),
 
 			// html
 			appManifest({
@@ -119,6 +161,7 @@ export default function ({
 					html: app.lang ? { lang: app.lang } : {},
 				},
 				meta: [
+					{ charset: 'utf-8' },
 					...(app.short_name ? [{ name: 'application-name', content: app.short_name }] : []),
 					...(pkg.author ? [{ name: 'author', content: pkg.author }] : []),
 					...(app.description ? [{ name: 'description', content: app.description }] : []),
@@ -143,27 +186,29 @@ export default function ({
 						// https://ogp.me/#structured
 					] : [])
 				],
-				template: minifiedHtml({
-					collapseWhitespace: true,
-					useShortDoctype: true,
-					removeComments: true,
-					removeAttributeQuotes: true,
-					removeRedundantAttributes: true,
-					removeEmptyAttributes: true,
-					removeTagWhitespace: true,
-					removeScriptTypeAttributes: true,
-					removeStyleLinkTypeAttributes: true,
-					minifyCss: true,
-					minifyJs: true,
-					sortAttributes: true,
-					sortClassName: true,
-					// somehow 👇 will remove <html> and </html> as long as it doesn't has attributes
-					removeOptionalTags: true,
-				}, { manifest }),
+				template: mode.production ?
+					html.minify({
+						collapseWhitespace: true,
+						useShortDoctype: true,
+						removeComments: true,
+						removeAttributeQuotes: true,
+						removeRedundantAttributes: true,
+						removeEmptyAttributes: true,
+						removeTagWhitespace: true,
+						removeScriptTypeAttributes: true,
+						removeStyleLinkTypeAttributes: true,
+						minifyCss: true,
+						minifyJs: true,
+						sortAttributes: true,
+						sortClassName: true,
+						// somehow 👇 will remove <html> and </html> as long as it doesn't has attributes
+						removeOptionalTags: true,
+					}, { manifest }) :
+					html.template({ manifest }),
 			}),
 
 			// report
-			production && sizeSnapshot(),
+			mode.production && !hash && sizeSnapshot(),
 		],
 	}
 }

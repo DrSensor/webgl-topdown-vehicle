@@ -1,0 +1,44 @@
+:root {
+    --logo: url(assets/logo.png);
+}
+
+canvas {
+    // fullscreen
+    width  : 100%;
+    margin : auto;
+    padding: 0;
+
+    // center and remove padding & scrollbar
+    position: absolute;
+    top     : 0;
+    bottom  : 0;
+    left    : 0;
+    right   : 0;
+
+    image-rendering: pixelated; // chrome
+    image-rendering: crisp-edges; // firefox
+
+    // TODO: parallax background
+    background-image         : var(--logo);
+    background-size          : contain;
+    // background-size       : auto 90%;
+    background-repeat        : no-repeat;
+    background-position      : center;
+
+}
+
+body {
+    margin    : 0;
+    padding   : 0;
+    background: black;
+}
+
+// hide scrollbar
+body {
+    -ms-overflow-style: none; // IE and Edge
+    scrollbar-width   : none; // Firefox
+}
+
+body::-webkit-scrollbar {
+    display: none; // Chrome, Safari and Opera
+}

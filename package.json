@@ -1,5 +1,10 @@
 {
 	"name": "open-game",
+	"scripts": {
+		"build": "rollup -c",
+		"preview": "rollup -c --watch",
+		"start": "nollup -c rollup.config.mjs --hot"
+	},
 	"dependencies": {
 		"@pixi/app": "^5.3.3",
 		"@pixi/constants": "^5.3.3",
@@ -12,11 +17,13 @@
 		"@pixi/sprite": "^5.3.3",
 		"@pixi/ticker": "^5.3.3",
 		"@pixi/unsafe-eval": "^5.3.3",
-		"@pixi/utils": "^5.3.3"
+		"@pixi/utils": "^5.3.3",
+		"pixi.js": "^5.3.3"
 	},
 	"devDependencies": {
-		"bundler-config": "^0.0.0",
+		"bundler": "^0.0.0",
 		"fibers": "^5.0.0",
+		"nollup": "^0.13.10",
 		"rollup": "^2.27.1",
 		"sass": "^1.26.11",
 		"tslib": "^2.0.1",
