@@ -64,6 +64,8 @@ importers:
       rollup-plugin-serve: 1.0.4
       rollup-plugin-size-snapshot: 0.12.0
       rollup-plugin-styles: 3.10.0
+      rollup-plugin-terser: 7.0.2
+      rollup-plugin-uglify: 6.0.4
     specifiers:
       '@ampproject/rollup-plugin-closure-compiler': ^0.26.0
       '@rollup/plugin-auto-install': ^2.1.0
@@ -84,6 +86,8 @@ importers:
       rollup-plugin-serve: ^1.0.4
       rollup-plugin-size-snapshot: ^0.12.0
       rollup-plugin-styles: ^3.10.0
+      rollup-plugin-terser: ^7.0.2
+      rollup-plugin-uglify: ^6.0.4
 lockfileVersion: 5.1
 packages:
   /@ampproject/remapping/0.2.0:
@@ -3029,6 +3033,25 @@ packages:
       node: '>= 10.14.2'
     resolution:
       integrity: sha512-TpfaviN1R2pQWkIihlfEanwOXK0zcxrKEE4MlU6Tn7keoXdN6/3gK/xl0yEh8DOunn5pOVGKf8hB4R9gVh04ig==
+  /jest-worker/24.9.0:
+    dependencies:
+      merge-stream: 2.0.0
+      supports-color: 6.1.0
+    dev: true
+    engines:
+      node: '>= 6'
+    resolution:
+      integrity: sha512-51PE4haMSXcHohnSMdM42anbvZANYTqMrr52tVKPqqsPJMzoP6FYYDVqahX/HrAoKEKz3uUPzSvKs9A3qR4iVw==
+  /jest-worker/26.3.0:
+    dependencies:
+      '@types/node': 14.11.2
+      merge-stream: 2.0.0
+      supports-color: 7.2.0
+    dev: true
+    engines:
+      node: '>= 10.13.0'
+    resolution:
+      integrity: sha512-Vmpn2F6IASefL+DVBhPzI2J9/GJUsqzomdeN+P+dK8/jKxbh8R3BtFnx3FIta7wYlPU62cpJMJQo4kuOowcMnw==
   /js-tokens/4.0.0:
     dev: true
     resolution:
@@ -3245,6 +3268,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-sAqqVW3YtEVoFQ7J0blT8/kMu2E=
+  /merge-stream/2.0.0:
+    dev: true
+    resolution:
+      integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==
   /methods/1.1.2:
     dev: true
     engines:
@@ -4607,6 +4634,28 @@ packages:
       rollup: ^2.2.0
     resolution:
       integrity: sha512-J9oHllasTFjzooqJnZWDlxHeZgnh3CVtNWUoQ0mWYGNul592ll4T7zdFCFwNWljIh6ZI2UPZ4lbAEfvQ5Fv1DQ==
+  /rollup-plugin-terser/7.0.2:
+    dependencies:
+      '@babel/code-frame': 7.10.4
+      jest-worker: 26.3.0
+      serialize-javascript: 4.0.0
+      terser: 5.3.2
+    dev: true
+    peerDependencies:
+      rollup: ^2.0.0
+    resolution:
+      integrity: sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ==
+  /rollup-plugin-uglify/6.0.4:
+    dependencies:
+      '@babel/code-frame': 7.10.4
+      jest-worker: 24.9.0
+      serialize-javascript: 2.1.2
+      uglify-js: 3.10.4
+    dev: true
+    peerDependencies:
+      rollup: '>=0.66.0 <2'
+    resolution:
+      integrity: sha512-ddgqkH02klveu34TF0JqygPwZnsbhHVI6t8+hGTcYHngPkQb5MIHI0XiztXIN/d6V9j+efwHAqEL7LspSxQXGw==
   /rollup/2.28.1:
     dev: true
     engines:
@@ -4693,6 +4742,10 @@ packages:
       node: '>= 0.8.0'
     resolution:
       integrity: sha512-BsVKsiGcQMFwT8UxypobUKyv7irCNRHk1T0G680vk88yf6LBByGcZJOTJCrTP2xVN6yI+XjPJcNuE3V4fT9sAg==
+  /serialize-javascript/2.1.2:
+    dev: true
+    resolution:
+      integrity: sha512-rs9OggEUF0V4jUSecXazOYsLfu7OGK2qIn3c7IPBiffz32XniEp/TX9Xmc9LQfK2nQ2QKHvZ2oygKUGU0lG4jQ==
   /serialize-javascript/4.0.0:
     dependencies:
       randombytes: 2.1.0
@@ -5019,6 +5072,17 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-EAPipTNeWsb/3wLPeup1tVPaXfIaU68xMnVdPafIL1TV05OhASArYyIfFvnvJCNrR2NIOvDVNNTFRa+Re2MWyw==
+  /terser/5.3.2:
+    dependencies:
+      commander: 2.20.3
+      source-map: 0.6.1
+      source-map-support: 0.5.19
+    dev: true
+    engines:
+      node: '>=6.0.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-H67sydwBz5jCUA32ZRL319ULu+Su1cAoZnnc+lXnenGRYWyLE3Scgkt8mNoAsMx0h5kdo758zdoS0LG9rYZXDQ==
   /thenify-all/1.6.0:
     dependencies:
       thenify: 3.3.1
@@ -5140,6 +5204,13 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-tEu6DGxGgRJPb/mVPIZ48e69xCn2yRmCgYmDugAVwmJ6o+0u1RI18eO7E7WBTLYLaEVVOhwQmcdhQHweux/WPg==
+  /uglify-js/3.10.4:
+    dev: true
+    engines:
+      node: '>=0.8.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-kBFT3U4Dcj4/pJ52vfjCSfyLyvG9VYYuGYPmrPvAxRw/i7xHiT4VvCev+uiEMcEEiu6UNB6KgWmGtSUYIWScbw==
   /unicode-canonical-property-names-ecmascript/1.0.4:
     dev: true
     engines:

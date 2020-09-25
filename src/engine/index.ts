@@ -1,15 +1,16 @@
-// TODO: find a way to use google-closure-compiler{compilation_level: 'ADVANCED'}
-// import { install } from '@pixi/unsafe-eval'
-// import * as PIXI from '@pixi/core'
-// install(PIXI)
-
 // non tree-shakeable module, only useful for prototyping
 // import { UPDATE_PRIORITY, Renderer, Ticker, Container } from 'pixi.js'
 
 // tree-shakeable module, https://pixijs.io/customize
-import { Renderer, BatchRenderer } from '@pixi/core'
 import { Ticker } from '@pixi/ticker'
 import { Container } from '@pixi/display'
+import { Renderer, BatchRenderer } from '@pixi/core'
+
+// TODO: -Oz, google-closure-compiler{compilation_level: 'ADVANCED'}
+// import { install } from '@pixi/unsafe-eval'
+// import * as PIXI from '@pixi/core'
+// install(PIXI)
+// const { Renderer, BatchRenderer } = PIXI
 
 import { UPDATE_PRIORITY } from './constant'
 
@@ -20,7 +21,7 @@ export const
     renderer = new Renderer({
         antialias: true,
         transparent: true,
-        resolution: devicePixelRatio,
+        resolution: window.devicePixelRatio,
     }),
     render_process = new Ticker(),
     physics_process = new Ticker(),
@@ -36,14 +37,14 @@ physics_process.maxFPS = 60
 physics_process.add(() => { }, UPDATE_PRIORITY.LOW)
 physics_process.start()
 
-addEventListener('resize', resize)
+window.addEventListener('resize', resize)
 resize()
 
 function resize() {
     const width = screen.width, height = screen.height
-        , ratio = Math.min(innerWidth / width, innerHeight / height)
+        , ratio = Math.min(window.innerWidth / width, window.innerHeight / height)
 
-    renderer.resize(innerWidth / 2, innerHeight / 2)
+    renderer.resize(window.innerWidth / 2, window.innerHeight / 2)
     stage.scale.set(ratio)
 
     // disable this to make (0,0) as center

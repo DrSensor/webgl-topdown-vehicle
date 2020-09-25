@@ -14,6 +14,9 @@ import sucrase from '@rollup/plugin-sucrase'
 import strip from '@rollup/plugin-strip'
 import buble from '@rollup/plugin-buble'
 import gcc from '@ampproject/rollup-plugin-closure-compiler'
+import { terser } from 'rollup-plugin-terser'
+import uglify3 from 'rollup-plugin-uglify'
+const { uglify } = uglify3
 
 // meta
 import indexHtml from '@rollup/plugin-html'
@@ -40,6 +43,7 @@ export default function ({
 	manifest = './manifest.json',
 	assets = { publicPath: 'assets' },
 	hash = true,
+	flags = new Set(['-Os'])
 } = {}) {
 	const
 		INPUT_NAME = basename(input, extname(input)),
@@ -58,7 +62,8 @@ export default function ({
 		input,
 		output: {
 			dir: dist,
-			format: mode.production ? 'iife' : 'es',
+			//format: mode.production ? 'iife' : 'es',
+			format: 'es',
 			sourcemap: !mode.production,
 			freeze: false,
 			esModule: false,
@@ -139,10 +144,16 @@ export default function ({
 			...(mode.production ? [
 				typescript(),
 				strip(),
-				buble(),
-				gcc({
-					compilation_level: 'SIMPLE',
+				flags.has('-Oz') && gcc({
+  					compilation_level: 'ADVANCED',
+  					module_resolution: 'BROWSER',
+  					isolation_mode: 'IIFE',
 				}),
+				...(flags.has('-Os') ? [
+					buble(),
+					terser({ toplevel: true }),
+					uglify({ sourcemap: false, toplevel: true }),
+				] : []),
 			] : []),
 
 			// html

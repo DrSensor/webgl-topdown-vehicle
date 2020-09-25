@@ -18,7 +18,9 @@
     "rollup-plugin-manifest-json": "^1.4.2",
     "rollup-plugin-serve": "^1.0.4",
     "rollup-plugin-size-snapshot": "^0.12.0",
-    "rollup-plugin-styles": "^3.10.0"
+    "rollup-plugin-styles": "^3.10.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-uglify": "^6.0.4"
   },
   "name": "bundler",
   "version": "0.0.0",
