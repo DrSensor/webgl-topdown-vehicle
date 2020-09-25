@@ -7,5 +7,6 @@ export default {
     ...config({
         input: 'src/main.ts',
         hash: false,
+        body: '<canvas/>',
     }),
 }

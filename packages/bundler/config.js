@@ -23,6 +23,7 @@ import indexHtml from '@rollup/plugin-html'
 import * as html from './html-template.js'
 import styles from 'rollup-plugin-styles'
 import hotcss from 'rollup-plugin-hot-css'
+import purgecss from '@fullhuman/postcss-purgecss'
 import appManifest from 'rollup-plugin-manifest-json'
 
 // QoL
@@ -43,10 +44,13 @@ export default function ({
 	manifest = './manifest.json',
 	assets = { publicPath: 'assets' },
 	hash = true,
-	flags = new Set(['-Os'])
+	flags = new Set(['-Os']),
+	body = { content: null, inject: false },
 } = {}) {
+  	if (typeof body === 'string') body = { content: body, inject: true }
 	const
 		INPUT_NAME = basename(input, extname(input)),
+		content = body.inject ? body.content : null,
 		pkg = loadPkg(packageJson),
 		app = loadPkg(manifest),
 		dist = `dist/${mode.production ?
@@ -62,8 +66,7 @@ export default function ({
 		input,
 		output: {
 			dir: dist,
-			//format: mode.production ? 'iife' : 'es',
-			format: 'es',
+			format: mode.production ? flags.has('-Oz') ? 'es' : 'iife' : 'es',
 			sourcemap: !mode.production,
 			freeze: false,
 			esModule: false,
@@ -120,6 +123,16 @@ export default function ({
 						'compressed' : 'expanded',
 				},
 				less: { compress: mode.production },
+				plugins: [
+  					// TODO: run purgecss only after output is generated
+  					mode.production && purgecss({ content: [
+      						{
+        						raw: html.template(body.content),
+        						extension: 'html',
+      						},
+      						'./src/**.{ts,js}',
+  					]}),
+				],
 			}),
 			mode.development && hotcss({
 				hot: true,
@@ -214,8 +227,8 @@ export default function ({
 						sortClassName: true,
 						// somehow 👇 will remove <html> and </html> as long as it doesn't has attributes
 						removeOptionalTags: true,
-					}, { manifest }) :
-					html.template({ manifest }),
+					}, { manifest, content }) :
+					html.template({	manifest, content }),
 			}),
 
 			// report

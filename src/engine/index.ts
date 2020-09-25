@@ -22,12 +22,11 @@ export const
         antialias: true,
         transparent: true,
         resolution: window.devicePixelRatio,
+        view: document.querySelector('canvas'),
     }),
     render_process = new Ticker(),
     physics_process = new Ticker(),
     stage = new Container()
-
-document.body.append(renderer.view)
 
 render_process.maxFPS = 48
 render_process.add(() => { renderer.render(stage) }, UPDATE_PRIORITY.LOW)

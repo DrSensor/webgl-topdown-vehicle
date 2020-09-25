@@ -46,6 +46,7 @@ importers:
   packages/bundler:
     devDependencies:
       '@ampproject/rollup-plugin-closure-compiler': 0.26.0
+      '@fullhuman/postcss-purgecss': 3.0.0
       '@rollup/plugin-auto-install': 2.1.0
       '@rollup/plugin-buble': 0.21.3
       '@rollup/plugin-commonjs': 15.1.0
@@ -68,6 +69,7 @@ importers:
       rollup-plugin-uglify: 6.0.4
     specifiers:
       '@ampproject/rollup-plugin-closure-compiler': ^0.26.0
+      '@fullhuman/postcss-purgecss': ^3.0.0
       '@rollup/plugin-auto-install': ^2.1.0
       '@rollup/plugin-buble': ^0.21.3
       '@rollup/plugin-commonjs': ^15.0.0
@@ -133,6 +135,13 @@ packages:
     dev: true
     resolution:
       integrity: sha512-i6rgnR/YgPEQzZZnbTHHuZdlE8qyoBNalD6F+q4vAFlcMEcqmkoG+mPqJYJCo63qPf74+Y1UZsl3l6f7/RIkmA==
+  /@fullhuman/postcss-purgecss/3.0.0:
+    dependencies:
+      postcss: 7.0.32
+      purgecss: 3.0.0
+    dev: true
+    resolution:
+      integrity: sha512-cvuOgMwIVlfgWcUMqg5p33NbGUxLwMrKtDKkm3QRfOo4PRVNR6+y/xd9OyXTVZiB1bIpKNJ0ZObYPWD3DRQDtw==
   /@jest/types/26.3.0:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.3
@@ -1493,6 +1502,12 @@ packages:
       node: '>= 6'
     resolution:
       integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
+  /commander/6.1.0:
+    dev: true
+    engines:
+      node: '>= 6'
+    resolution:
+      integrity: sha512-wl7PNrYWd2y5mp1OK/LhTlv8Ff4kQJQRXXAvF+uU/TPNiVJUxZLRYGj/B0y/lPGAVcSbJqH2Za/cvHmrPMC8mA==
   /commondir/1.0.1:
     dev: true
     resolution:
@@ -4198,6 +4213,17 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-0ClFaY4X1ra21LRqbW6y3rUbWcxnSVkDFG57R7Nxus9J9myPFlv+jYDMohzpkBx0RrjjiqjtycpchQ+PLGmZ9w==
+  /postcss-selector-parser/6.0.4:
+    dependencies:
+      cssesc: 3.0.0
+      indexes-of: 1.0.1
+      uniq: 1.0.1
+      util-deprecate: 1.0.2
+    dev: true
+    engines:
+      node: '>=4'
+    resolution:
+      integrity: sha512-gjMeXBempyInaBqpp8gODmwZ52WaYsVOsfr4L4lDQ7n3ncD6mEyySiDtgzCT+NYC0mmeOLvtsF8iaEf0YT6dBw==
   /postcss-svgo/4.0.2:
     dependencies:
       is-svg: 3.0.0
@@ -4227,6 +4253,16 @@ packages:
     dev: true
     resolution:
       integrity: sha512-97DXOFbQJhk71ne5/Mt6cOu6yxsSfM0QGQyl0L25Gca4yGWEGJaig7l7gbCX623VqTBNGLRLaVUCnNkcedlRSQ==
+  /postcss/7.0.32:
+    dependencies:
+      chalk: 2.4.2
+      source-map: 0.6.1
+      supports-color: 6.1.0
+    dev: true
+    engines:
+      node: '>=6.0.0'
+    resolution:
+      integrity: sha512-03eXong5NLnNCD05xscnGKGDZ98CyzoqPSMjOe6SuoQY7Z2hIj0Ld1g/O/UQRuOle2aRtiIRDg9tDcTGAkLfKw==
   /postcss/7.0.34:
     dependencies:
       chalk: 2.4.2
@@ -4321,6 +4357,16 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
+  /purgecss/3.0.0:
+    dependencies:
+      commander: 6.1.0
+      glob: 7.1.6
+      postcss: 7.0.32
+      postcss-selector-parser: 6.0.4
+    dev: true
+    hasBin: true
+    resolution:
+      integrity: sha512-t3FGCwyX9XWV3ffvnAXTw6Y3Z9kNlcgm14VImNK66xKi5sdqxSA2I0SFYxtmZbAKuIZVckPdazw5iKL/oY/2TA==
   /q/1.5.1:
     dev: true
     engines:

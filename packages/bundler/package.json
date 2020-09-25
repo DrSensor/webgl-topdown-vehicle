@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
+    "@fullhuman/postcss-purgecss": "^3.0.0",
     "@rollup/plugin-auto-install": "^2.1.0",
     "@rollup/plugin-buble": "^0.21.3",
     "@rollup/plugin-commonjs": "^15.0.0",
